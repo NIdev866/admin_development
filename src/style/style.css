@@ -1,0 +1,93 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  text-align: center;
+}
+.red{
+  color: red;
+}
+.form-container{
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+.z9000{
+  position: absolute;
+  height:500px;
+  width: auto;
+  margin-top: 200px;
+  z-index: 9999;
+}
+.slide{
+  animation: slide 500ms ease-in forwards;
+}
+@keyframes slideToLeft {
+  0%{
+    transform: translateX(15%);
+  }
+  100%{
+    transform: translateX(0%);
+  }
+}
+@keyframes slideToRight {
+  0%{
+    transform: translateX(-15%);
+  }
+  100%{
+    transform: translateX(0%);
+  }
+}
+.toRight-enter{
+  opacity:0;
+  animation: slide 1s ease-out forwards
+}
+.toRight-enter-active{
+  opacity:1;
+  transition: opacity 500ms ease-out;
+  animation: slideToRight 500ms ease-out forwards
+}
+.toRight-leave{
+  opacity:1;
+  display: none;
+}
+.toRight-leave-active{
+  opacity:0;
+  display: none;
+}
+.toRight-appear{
+  opacity: 0;
+}
+.toRight-appear-active{
+  opacity:1;
+  transition: opacity 500ms ease-out;
+}
+.toLeft-enter{
+  opacity:0;
+  animation: slide 1s ease-out forwards
+}
+.toLeft-enter-active{
+  opacity:1;
+  transition: opacity 500ms ease-out;
+  animation: slideToLeft 500ms ease-out forwards
+}
+.toLeft-leave{
+  opacity:1;
+  display: none;
+
+}
+.toLeft-leave-active{
+  opacity:0;
+  display: none;
+}
+.toLeft-appear{
+  opacity: 0;
+}
+.toLeft-appear-active{
+  opacity:1;
+  transition: opacity 500ms ease-out;
+}
+.finishedStep{
+  background-color: "blue";
+}
+.mui-ripple-circle {display: none};
