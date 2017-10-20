@@ -6,7 +6,10 @@ import { COMPANIES,
   NEST_JOBSEEKERS_INTO_CAMPAIGNS,
   CLEAR_ALL_JOBSEEKERS_STATE,
   NESTED_JOB_SECTORS,
-  WORKFORCE } from '../actions/types.js';
+  WORKFORCE,
+  COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH,
+  RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH
+  } from '../actions/types.js';
 
 export default function(state = {}, action){
     switch(action.type){
@@ -51,8 +54,22 @@ export default function(state = {}, action){
           let result = stateHardCopy.jobseekersByCampaign
           return { ...stateHardCopy, jobseekersByCampaign: result }
         case WORKFORCE:
-  
           return { ...state , workforce: action.payload}
+
+
+
+        case COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH:
+
+          if(!state.counterOfJobseekersByCampaignIdToFixGlitch){
+            state.counterOfJobseekersByCampaignIdToFixGlitch = 0
+          }
+
+          return { ...state, counterOfJobseekersByCampaignIdToFixGlitch: state.counterOfJobseekersByCampaignIdToFixGlitch + 1 }
+
+        case RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH:
+          return { ...state, counterOfJobseekersByCampaignIdToFixGlitch: 0}
+
+
     }
 
     return state;

@@ -19,7 +19,7 @@ class ClientsTabParent extends Component {
 
 
     return (
-      <div style={{margin: '0 auto', height: 'calc(100vh - 10px)', marginBottom: '10px'}}>
+      <div style={{margin: '0 auto', marginBottom: '40px'}}>
       {this.props.companies && this.props.companies.map((company)=>{
           return(
             <Card style={cardStyle}>

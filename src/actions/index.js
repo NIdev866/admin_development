@@ -17,7 +17,9 @@ import {
   LOCALLY_UPDATE_JOBSEEKERSTATUS_TO_SELECTED,
   NEST_JOBSEEKERS_INTO_CAMPAIGNS,
   CLEAR_ALL_JOBSEEKERS_STATE,
-  WORKFORCE
+  WORKFORCE,
+  COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH,
+  RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH
 } from './types.js';
 
 
@@ -37,11 +39,7 @@ does everything magically in the background.
 
 
 
-
-
 const ROOT_URL = 'http://localhost:3000';
-
-
 
 
 
@@ -58,21 +56,6 @@ export function fetchNestedJobSectors(){
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export function fetchWorkforce(){
   return function(dispatch){
     axios.get(`${ROOT_URL}/workforce/all`)
@@ -86,33 +69,7 @@ export function fetchWorkforce(){
   }
 }
 
-
-
 //'GET admin/workforce/all'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export function fetchCompanies(){
   return function(dispatch){
@@ -147,10 +104,48 @@ export function fetchAllCampaigns(){
   }
 }
 
-export const fetchAllJobseekersByCampaignId = campaign_id=>(
-  dispatch=>dispatch({ type: ALL_JOBSEEKERS_BY_CAMPAIGN, 
-  payload: axios.get(`${ROOT_URL}/campaigns/jobseekers/${campaign_id}`) })
-)
+
+
+
+
+
+
+
+
+
+
+export function fetchAllJobseekersByCampaignId(campaign_id){
+  return function(dispatch){
+    axios.get(`${ROOT_URL}/campaigns/jobseekers/${campaign_id}`)
+      .then(response => {
+        dispatch({ type: ALL_JOBSEEKERS_BY_CAMPAIGN, payload: response });
+        dispatch(actionCounterOfJobseekersByCampaignIdToFixGlitch())
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+  }
+}
+
+export const actionCounterOfJobseekersByCampaignIdToFixGlitch = ()=>({
+  type: COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH
+})
+
+export const resetToZeroCounterOfJobseekersByCampaignIdToFixGlitch = ()=>({
+  type: RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const nestJobseekersIntoCampaigns = ()=>{
   return {

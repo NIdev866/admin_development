@@ -25,9 +25,36 @@ class TabComponent extends Component {
 
     this.state = {
       slideIndex: 0,
+
+      width: '0', height: '0'
     }
     this.handleSwipeChange = this.handleSwipeChange.bind(this)
+
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
+
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  }
+
+
+
+
+
+
+
+
+
+
 
 
   handleSwipeChange(value){
@@ -117,16 +144,16 @@ class TabComponent extends Component {
             index={this.state.slideIndex}
             onChangeIndex={this.handleSwipeChange}
           >
-            <div style={{padding: '0 10px', width: 'calc(100% - 20px)'}}>
+            <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
               <WorkforceTabParent workforceClick={this.props.workforceClick}/>
             </div>
-            <div style={{padding: '0 10px', width: 'calc(100% - 20px)'}}>
+            <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
               <ApplicantsTabParent applicantsClick={this.props.applicantsClick}/>
             </div>
-            <div style={{padding: '0 10px', width: 'calc(100% - 20px)'}}>
+            <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
               <ClientsTabParent clientsClick={this.props.clientsClick}/>
             </div>
-            <div style={{padding: '0 10px', width: 'calc(100% - 20px)'}}>
+            <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
               <StatisticsTabParent statisticsClick={this.props.statisticsClick}/>
             </div>
           </SwipeableViews>

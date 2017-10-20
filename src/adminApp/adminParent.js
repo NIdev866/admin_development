@@ -35,13 +35,13 @@ class AdminParent extends Component {
       slider: "closed",
       tabOpen: "workforce",
       jobAdAddClicked: false,
-      screenWidth: null,
+
+
+      width: '0', height: '0'
     }
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 
 
-
-
-    this._onResize = this._onResize.bind(this)
     this.workforceClick = this.workforceClick.bind(this)
     this.applicantsClick = this.applicantsClick.bind(this)
     this.clientsClick = this.clientsClick.bind(this)
@@ -49,12 +49,21 @@ class AdminParent extends Component {
     this.jobAdAddClick = this.jobAdAddClick.bind(this)
   }
 
-
-
-
-  _onResize(width) {
-    this.setState({screenWidth: width})
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  }
+
+
+
   workforceClick(){
     if(this.state.slider == "closed"){
       this.setState({tabOpen: "workforce", slider: "open"})
@@ -134,8 +143,8 @@ class AdminParent extends Component {
         transition: "all .2s ease-in-out",
         height: "50px",
         backgroundColor: globalThemes.blueGrey500,
-        width: "100vw",
-        top: "calc(100vh - 51px)",
+        width: this.state.width,
+        top: this.state.height - 51,
         zIndex: '3',
       }
     }
@@ -144,9 +153,9 @@ class AdminParent extends Component {
         overflow: "hidden",
         position: "absolute",
         transition: "all .2s ease-in-out",
-        height: "100vh",
+        height: this.state.height,
         backgroundColor: globalThemes.blueGrey500,
-        width: "100vw",
+        width: this.state.width,
         top: "0px",
         zIndex: '3'
       }
@@ -162,7 +171,7 @@ class AdminParent extends Component {
     let adButtonStyle = {}
     let adTextStyle = {}
     let jobAdAddTransitionStyle = {}
-    if(this.state.screenWidth > 700){
+    if(this.state.width > 700){
       adButtonStyle = {
         position: 'absolute',
         bottom: '40px', 
@@ -256,8 +265,7 @@ class AdminParent extends Component {
     }
     return (
       <div style={{position: "relative", width: "100vw", height: "100vh", overflow: "hidden", backgroundColor: globalThemes.blueGrey500, fontFamily: globalFonts.Abel}}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
-        {this.state.screenWidth > 700 &&
+        {this.state.width > 700 &&
           <div style={{float: "left", width: "60%", position: "fixed", height: "100vh"}}>
           {this.props.allCampaigns &&
             <MapComponent 
@@ -270,7 +278,7 @@ class AdminParent extends Component {
           }
           </div>
         }
-        {this.state.screenWidth <= 700 &&
+        {this.state.width <= 700 &&
             <div style={{position: "absolute", height: "calc(100vh - 50px)", width: "100vw", zIndex: '1'}}>
             {this.props.allCampaigns &&
               <MapComponent 
@@ -283,7 +291,7 @@ class AdminParent extends Component {
             }
           </div>
         }
-        {this.state.screenWidth > 700 &&
+        {this.state.width > 700 &&
           <div style={{width: "calc(40% - 1px)", float: "right", borderLeft: '1px solid grey'}}>
             <TabComponent
               slider={this.state.slider}
@@ -295,7 +303,7 @@ class AdminParent extends Component {
              />
           </div>
         }
-        {this.state.screenWidth <= 700 &&
+        {this.state.width <= 700 &&
           <div style={sliderStyle}>
             <TabComponent
               slider={this.state.slider}

@@ -11,10 +11,15 @@ import {teal300, blueGrey500} from 'material-ui/styles/colors';
 class WorkforceTabParent extends Component {
   render() {
     return (
-      <div style={{backgroundColor: globalThemes.blueGrey500, marginTop: "20px"}}>
+      <div style={{backgroundColor: globalThemes.blueGrey500, marginTop: "20px", marginBottom: '40px'}}>
+        {this.props.allCampaigns && this.props.allCampaigns.length == this.props.counterOfJobseekersByCampaignIdToFixGlitch && this.props.jobseekersByCampaign && this.props.jobseekersByCampaign[0].map((worker)=>{
 
-        {this.props.jobseekersByCampaign && this.props.jobseekersByCampaign[0].map((worker)=>{
-          return (
+          if(worker.job_status == "selected"){
+            console.log('workerThatHasBeenSelected')
+          }
+
+          if(worker.job_status == "selected"){
+            return (
             <Card style={{marginBottom: '10px', position: 'relative', backgroundColor: globalThemes.blueGrey400}}>
               <CardHeader
                 style={{color: 'white', height: "90px", textAlign: "left", backgroundColor: globalThemes.blueGrey400}}
@@ -28,8 +33,17 @@ class WorkforceTabParent extends Component {
                 <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>{worker.email_id}</p>
                 <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>{worker.contact_no}</p>
               </CardHeader>
+
+              <CardText expandable={true} style={{color: 'white', textAlign: 'left', paddingBottom: "1px", paddingTop: "1px", backgroundColor: globalThemes.blueGrey400, marginBottom: '5px'}}>
+                <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "0px", padding: "0", color: "#DEDEDE"}}>Nationality: {worker.nationality}</p>
+                <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>{worker.when_to_start_work}</p>
+                <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>English level: {worker.english_level}</p>
+              </CardText>
+
             </Card>
-          )})
+          )
+          }
+          })
         }
       </div>
     )
@@ -39,7 +53,9 @@ class WorkforceTabParent extends Component {
 
 function mapStateToProps(state) {
   return {
-    jobseekersByCampaign: state.main.jobseekersByCampaign
+    jobseekersByCampaign: state.main.jobseekersByCampaign,
+    allCampaigns: state.main.allCampaigns,
+    counterOfJobseekersByCampaignIdToFixGlitch: state.main.counterOfJobseekersByCampaignIdToFixGlitch
   }
 }
 
