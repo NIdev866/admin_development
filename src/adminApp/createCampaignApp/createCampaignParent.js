@@ -53,11 +53,11 @@ class CreateCampaignParent extends Component {
               transitionLeaveTimeout={500}
               transitionAppear={true}
               transitionAppearTimeout={500}>            
-              {page === 1 && 
+              {page === 11 && 
                 <FormFirstPage 
                   onSubmit={this.nextPage} 
                 />}
-              {page === 2 && 
+              {page === 1 && 
                 <FormSecondPage 
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage} 
