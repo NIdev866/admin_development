@@ -16,7 +16,7 @@ const validate = values => {
   }
   if (!values.job_description) {
     errors.job_description = 'Required'
-  }else if(values.job_description.length > 100) {
+  }else if(values.job_description.length > 1500) {
     errors.job_description = 'Description too long'
   }  if (!values.location) {
     errors.location = 'Required'

@@ -1,16 +1,27 @@
 import { SubmissionError } from 'redux-form'
-import database from "../../../jobs.json"
+import axios from 'axios'
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function submit(values) {
-  return sleep(1000) // simulate server latency
-    .then(() => {
-      delete values.emailCopy
-      delete values.nested_job_sector_id
-      database.push(values) //not working (security issue). backend needed.
-      window.alert(`You submitted:\n\n${JSON.stringify(values, null, 2)}`)
-    })
+
+  delete values.emailCopy
+  delete values.nested_job_sector_id
+
+  const ROOT_URL = 'http://localhost:3000';
+
+  axios.post(`${ROOT_URL}/campaigns/add-campaign`,values)
+      .then(function (response) {
+
+        window.location.replace('/');
+
+      })
+      .catch(function (err) {
+        console.log('ERROR FROM SERVER '+err);
+         throw new SubmissionError({
+           _error: JSON.stringify(err)
+         })
+      });
+
 }
 
 export default submit

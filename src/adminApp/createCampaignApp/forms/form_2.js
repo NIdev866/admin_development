@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes} from 'react'
 import { Field, reduxForm, change } from 'redux-form'
 import validate from './validate'
@@ -7,14 +8,10 @@ import RaisedButton from 'material-ui/RaisedButton'
 import styles from './form_material_styles'
 import { Row, Col } from 'react-flexbox-grid'
 
-import Editor, { createEditorStateWithText } from 'draft-js';
-
 import RichTextEditor from 'react-rte';
 
-var marked = require('marked');
 
-
-
+import './style.css'
 
 
 
@@ -26,7 +23,7 @@ const renderError = ({ input, meta: { touched, error } }) => (
 
 
 
-
+const MAX_LENGTH = 1500;
 
 class MyStatefulEditor extends Component {
   static propTypes = {
@@ -35,23 +32,34 @@ class MyStatefulEditor extends Component {
 
   state = {
     valueForEditor: RichTextEditor.createEmptyValue(),
-    valueStringified: ''
+  }
+
+
+  _handleBeforeInput = () => {
+    const currentContent = this.state.valueForEditor;
+    const currentContentLength = currentContent._cache.html.length
+    if (currentContentLength > MAX_LENGTH - 1) {
+        console.log('you cant type more characters');
+        return 'handled'; // <-!!!
+    }
+  }
+
+  _handlePastedText = (pastedText) => {
+    const currentContent = this.state.valueForEditor;
+    const currentContentLength = currentContent._cache.html.length
+    if (currentContentLength + pastedText.length > MAX_LENGTH) {
+      console.log('you can type max ten characters');
+      return 'handled'; // <-!!!
+    }
   }
 
   onChange = (valueForEditor) => {
-
-
-    this.props.dispatch(change('admin', 'job_description', valueForEditor.toString('html')));
-
-
     this.setState({
-      valueForEditor,
-      valueStringified: valueForEditor.toString('html')
-    });
+      valueForEditor
+    },()=>{
+      this.props.dispatch(change('admin', 'job_description', valueForEditor.toString('html')));
+    })
     if (this.props.onChange) {
-      // Send the changes up to the parent component as an HTML string.
-      // This is here to demonstrate using `.toString()` but in a real app it
-      // would be better to avoid generating a string on each change.
       this.props.onChange(
         valueForEditor.toString('html')
       );
@@ -60,18 +68,15 @@ class MyStatefulEditor extends Component {
 
   render () {
 
-    if(document.getElementById("destination")){
-      document.getElementById("destination").innerHTML = marked(this.state.valueStringified)
-    }
-
     return (
       <div>
         <div style={{textAlign: 'left', color: 'rgb(189,189,189)', marginTop: '15px'}}>Job description</div>
         <RichTextEditor
           value={this.state.valueForEditor}
           onChange={this.onChange}
+          handleBeforeInput={this._handleBeforeInput} // <-!!!
+          handlePastedText={this._handlePastedText} // <-!!!
         />
-        <div id="destination"></div>
       </div>
     );
   }
