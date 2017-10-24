@@ -51,6 +51,10 @@ class ApplicantsTabParent extends Component {
     this.props.clearAllJobseekersState()
   }
   createDistance(campaignLat, campaignLng, campaignIndex, jobseekerLat, jobseekerLng, jobseekerIndex){
+
+    console.log({campaignLat, campaignLng, campaignIndex, jobseekerLat, jobseekerLng, jobseekerIndex})
+
+
     let resultDistance
     let DistanceService = new google.maps.DistanceMatrixService();
     DistanceService.getDistanceMatrix({
@@ -120,27 +124,36 @@ class ApplicantsTabParent extends Component {
                 </CardHeader>
                 <CardText expandable={true} style={{color: 'white', paddingBottom: "1px", paddingTop: "1px", backgroundColor: globalThemes.blueGrey400}}>
                   {campaign.jobseekers[0] && campaign.jobseekers[0].map((jobseeker, jobseekerIndex)=>{
-                    this.createDistance(
-                      parseFloat(campaign.lat), 
-                      parseFloat(campaign.lng), 
-                      campaignIndex,
-                      parseFloat(jobseeker.lat),
-                      parseFloat(jobseeker.lng),
-                      jobseekerIndex
-                    )
+
+                    if(jobseeker.lat && jobseeker.lng){
+                      this.createDistance(
+                        parseFloat(campaign.lat), 
+                        parseFloat(campaign.lng), 
+                        campaignIndex,
+                        parseFloat(jobseeker.lat),
+                        parseFloat(jobseeker.lng),
+                        jobseekerIndex
+                      )
+                    }
                     return (
                       <Card style={{marginBottom: '10px', position: 'relative', backgroundColor: globalThemes.blueGrey300}}>
                         <CardHeader
-                          style={{color: 'white', height: "90px", textAlign: "left", backgroundColor: globalThemes.blueGrey300}}
+                          style={{color: 'white', textAlign: "left", backgroundColor: globalThemes.blueGrey300, paddingBottom: '10px'}}
                           actAsExpander={true}
                           showExpandableButton={true}
                           iconStyle={{position: "relative", left: "12px", color: 'white'}}
                         >
                           <p style={{fontFamily: 'Poiret One', fontSize: "16px", margin: "-10px", marginTop: "-30px", padding: "0"}}><b>{jobseeker.first_name + ' ' + jobseeker.last_name}</b></p>
                           <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>{'Age range ' + jobseeker.age}</p>
-                          <p style={{fontFamily: globalFonts.Abel, 
-                            fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", 
-                            color: "#DEDEDE"}}>Distance: {this.state[`distance${campaignIndex},${jobseekerIndex}`] + " away"}</p>
+                          
+                          {jobseeker.lat && jobseeker.lng &&
+
+                            <p style={{fontFamily: globalFonts.Abel, 
+                              fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", 
+                              color: "#DEDEDE"}}>Distance: {this.state[`distance${campaignIndex},${jobseekerIndex}`] + " away"}</p>
+
+                          }
+
                           <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>{jobseeker.email_id}</p>
                           <p style={{fontFamily: globalFonts.Abel, fontSize: "13px", margin: "-10px", marginTop: "10px", padding: "0", color: "#DEDEDE"}}>{jobseeker.contact_no}</p>
                         </CardHeader>
