@@ -21,6 +21,7 @@ import TabComponent from "./tabComponent"
 import globalThemes from '../style/globalThemes.js'
 import globalFonts from '../style/globalFonts.js'
 
+import CircularProgress from 'material-ui/CircularProgress';
 
 config()
 const google = window.google
@@ -40,18 +41,86 @@ class AdminParent extends Component {
       width: '0', height: '0'
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-
-
     this.workforceClick = this.workforceClick.bind(this)
     this.applicantsClick = this.applicantsClick.bind(this)
     this.clientsClick = this.clientsClick.bind(this)
     this.statisticsClick = this.statisticsClick.bind(this)
     this.jobAdAddClick = this.jobAdAddClick.bind(this)
+
+
+    this.workforceSlidOn = this.workforceSlidOn.bind(this)
+    this.applicantsSlidOn = this.applicantsSlidOn.bind(this)
+    this.clientsSlidOn = this.clientsSlidOn.bind(this)
+    this.statisticsSlidOn = this.statisticsSlidOn.bind(this)
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*    setTimeout(function () { 
+      window.location.reload();
+    }, 60000);
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
   componentWillUnmount() {
@@ -61,6 +130,20 @@ class AdminParent extends Component {
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -108,6 +191,24 @@ class AdminParent extends Component {
       this.setState({tabOpen: "statistics"})
     }
   }
+  workforceSlidOn(){
+    this.setState({tabOpen: 'workforce'})
+  }
+  applicantsSlidOn(){
+    this.setState({tabOpen: 'applicants'})
+  }
+  clientsSlidOn(){
+    this.setState({tabOpen: 'clients'})
+  }
+  statisticsSlidOn(){
+    this.setState({tabOpen: 'statistics'})
+  }
+
+
+
+
+
+
   jobAdAddClick(){
     this.setState({jobAdAddClicked: true}, ()=>{setTimeout(()=>{this.setState({timeToReroute: true})}, 500)})
   }
@@ -208,7 +309,7 @@ class AdminParent extends Component {
           pointerEvents: "none", 
           width: "1px",
           height: "1px",
-          backgroundColor: "rgb(0,188,212)",
+          backgroundColor: "rgb(96, 125, 139)",
           zIndex: "4",
           borderRadius: "50%",
           position: 'absolute',
@@ -254,7 +355,7 @@ class AdminParent extends Component {
           pointerEvents: "none", 
           width: "1px",
           height: "1px",
-          backgroundColor: "rgb(0,188,212)",
+          backgroundColor: "rgb(96, 125, 139)",
           zIndex: "4",
           borderRadius: "50%",
           position: 'absolute',
@@ -267,20 +368,28 @@ class AdminParent extends Component {
       <div style={{position: "relative", width: "100vw", height: "100vh", overflow: "hidden", backgroundColor: globalThemes.blueGrey500, fontFamily: globalFonts.Abel}}>
         {this.state.width > 700 &&
           <div style={{float: "left", width: "60%", position: "fixed", height: "100vh"}}>
-          {this.props.allCampaigns &&
-            <MapComponent 
-              zoom={10}
-              center={{ lat: 51.537452, lng: -0.497681}}
-              containerElement={<div style={{height: 100+"%"}} />}
-              mapElement={<div style={{height: 100+"%"}} />}
-              allCampaigns={this.props.allCampaigns}
-            />
-          }
+            {!this.props.allCampaigns ?
+              <div style={{paddingTop: 'calc(50% - 140px)'}}>
+                  <CircularProgress color="white" size={80}  thickness={7}/>
+              </div>
+              :
+              <MapComponent 
+                zoom={10}
+                center={{ lat: 51.537452, lng: -0.497681}}
+                containerElement={<div style={{height: 100+"%"}} />}
+                mapElement={<div style={{height: 100+"%"}} />}
+                allCampaigns={this.props.allCampaigns}
+              />
+            }
           </div>
         }
         {this.state.width <= 700 &&
             <div style={{position: "absolute", height: "calc(100vh - 50px)", width: "100vw", zIndex: '1'}}>
-            {this.props.allCampaigns &&
+            {!this.props.allCampaigns ?
+              <div style={{paddingTop: 'calc(50% - 140px)'}}>
+                  <CircularProgress color="white" size={80}  thickness={7}/>
+              </div>
+              :
               <MapComponent 
                 zoom={10}
                 center={{ lat: 51.537452, lng: -0.497681}}
@@ -296,6 +405,12 @@ class AdminParent extends Component {
             <TabComponent
               slider={this.state.slider}
               workforceClick={this.workforceClick}
+
+              workforceSlidOn={this.workforceSlidOn}
+              applicantsSlidOn={this.applicantsSlidOn}
+              clientsSlidOn={this.clientsSlidOn}
+              statisticsSlidOn={this.statisticsSlidOn}
+
               applicantsClick={this.applicantsClick}
               clientsClick={this.clientsClick}
               statisticsClick={this.statisticsClick}
@@ -308,6 +423,12 @@ class AdminParent extends Component {
             <TabComponent
               slider={this.state.slider}
               workforceClick={this.workforceClick}
+
+              workforceSlidOn={this.workforceSlidOn}
+              applicantsSlidOn={this.applicantsSlidOn}
+              clientsSlidOn={this.clientsSlidOn}
+              statisticsSlidOn={this.statisticsSlidOn}
+
               applicantsClick={this.applicantsClick}
               clientsClick={this.clientsClick}
               statisticsClick={this.statisticsClick}

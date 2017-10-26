@@ -22,9 +22,7 @@ class MapComponent extends Component {
     centerPointFiltered.lat = parseFloat(centerPoint[0].lat)
     centerPointFiltered.lng = parseFloat(centerPoint[0].lng)
 
-    this.setState({center: centerPointFiltered}, ()=>{
-      console.log(this.state.center)
-    })
+    this.setState({center: centerPointFiltered})
   }
 
   render(){

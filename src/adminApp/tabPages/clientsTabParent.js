@@ -6,6 +6,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import globalThemes from '../../style/globalThemes.js'
 import globalFonts from '../../style/globalFonts.js'
 
+import CircularProgress from 'material-ui/CircularProgress';
 
 class ClientsTabParent extends Component {
   componentWillMount(){
@@ -20,7 +21,7 @@ class ClientsTabParent extends Component {
 
     return (
       <div style={{margin: '0 auto', marginBottom: '40px'}}>
-      {this.props.companies && this.props.companies.map((company)=>{
+      {this.props.companies ? this.props.companies.map((company)=>{
           return(
             <Card style={cardStyle}>
               <CardHeader
@@ -34,7 +35,12 @@ class ClientsTabParent extends Component {
               </CardHeader>
           </Card>
           )
-        })}
+        })
+        :
+        <div style={{paddingTop: 'calc(50% - 140px)'}}>
+          <CircularProgress color="white" size={80}  thickness={7}/>
+        </div>
+      }
       </div>
     )
   }

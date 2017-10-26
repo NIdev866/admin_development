@@ -15,11 +15,17 @@ import {
   ALL_JOBSEEKERS_BY_CAMPAIGN,
   UPDATE_JOBSEEKERSTATUS_TO_SELECTED,
   LOCALLY_UPDATE_JOBSEEKERSTATUS_TO_SELECTED,
+
   NEST_JOBSEEKERS_INTO_CAMPAIGNS,
+  CLEAR_NESTED_CAMPAIGNS_WITH_JOBSEEKERS_STATE,
+  CLEAR_ALL_CAMPAIGNS,
+
+
   CLEAR_ALL_JOBSEEKERS_STATE,
   WORKFORCE,
   COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH,
-  RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH
+  RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH,
+  FLATTEN_ALL_JOBSEEKERS_BY_CAMPAIGN_INTO_ONE_ARRAY
 } from './types.js';
 
 
@@ -43,6 +49,92 @@ const ROOT_URL = 'http://localhost:3000';
 
 
 
+
+
+export function clearAllCampaigns(){
+  return{
+    type: CLEAR_ALL_CAMPAIGNS
+  }
+}
+
+export function clearNestedCampaignsWithJobseekersState(){
+  return{
+    type: CLEAR_NESTED_CAMPAIGNS_WITH_JOBSEEKERS_STATE
+  }
+}
+
+
+/*export function archiveCampaign({campaign_id}){
+  return function(dispatch){
+    axios.put(`${ROOT_URL}/campaigns/archived?campaign_id=${campaign_id}`, {campaign_status: 'archived'})
+      .then(response => {
+        dispatch(clearAllJobseekersState())
+        dispatch(resetToZeroCounterOfJobseekersByCampaignIdToFixGlitch())
+        dispatch(clearAllCampaigns())
+        dispatch(clearNestedCampaignsWithJobseekersState())
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+  }
+}*/
+
+export function archiveCampaign({campaign_id}){
+  return function(dispatch){
+    axios.put(`${ROOT_URL}/campaigns/archived?campaign_id=${campaign_id}`, {campaign_status: 'archived'})
+      .then(response => {
+        dispatch(clearAllJobseekersState())
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+  }
+}
+
+
+
+
+
+
+
+
+export function updateJobseekerJobStatus({job_status, jobseeker_id, campaign_id}){
+  return function(dispatch){
+    axios.put(`${ROOT_URL}/jobseeker/select?jobseeker_id=${jobseeker_id}&campaign_id=${campaign_id}`, {job_status})
+      .then(response => {
+        dispatch({ type: COMPANIES, payload: response.data });
+      })
+      .catch((err)=>{
+        console.log(err)
+
+      })
+  }
+}
+
+
+
+
+
+
+
+
+export function moveWorkerToArchived({job_status, jobseeker_id, campaign_id}){
+  return function(dispatch){
+    axios.put(`${ROOT_URL}/jobseeker/select?jobseeker_id=${jobseeker_id}&campaign_id=${campaign_id}`, {job_status})
+      .then(response => {
+        dispatch(fetchWorkforce())
+      })
+      .catch((err)=>{
+        console.log(err)
+
+      })
+  }
+}
+
+export const flattenAllJobseekersByCampaignIntoOneArray = ()=>({
+  type: FLATTEN_ALL_JOBSEEKERS_BY_CAMPAIGN_INTO_ONE_ARRAY
+})
+
 export function fetchNestedJobSectors(){
   return function(dispatch){
     axios.get(`${ROOT_URL}/admin/get-nested-job-sectors`)
@@ -58,7 +150,7 @@ export function fetchNestedJobSectors(){
 
 export function fetchWorkforce(){
   return function(dispatch){
-    axios.get(`${ROOT_URL}/workforce/all`)
+    axios.get(`${ROOT_URL}/admin/workforce/all`)
       .then(response => {
         dispatch({ type: WORKFORCE, payload: response.data });
       })
@@ -84,12 +176,11 @@ export function fetchCompanies(){
   }
 }
 
-
-export const updateJobseekerJobStatus = ({job_status, jobseeker_id, campaign_id})=>(
+/*export const updateJobseekerJobStatus = ({job_status, jobseeker_id, campaign_id})=>(
   dispatch=>dispatch({ type: UPDATE_JOBSEEKERSTATUS_TO_SELECTED, 
   payload: axios.put(`${ROOT_URL}/jobseeker/select?jobseeker_id=${jobseeker_id}&campaign_id=${campaign_id}`, {job_status}) })
 )
-
+*/
 
 export function fetchAllCampaigns(){
   return function(dispatch){
@@ -103,16 +194,6 @@ export function fetchAllCampaigns(){
       })
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 export function fetchAllJobseekersByCampaignId(campaign_id){
   return function(dispatch){
@@ -134,18 +215,6 @@ export const actionCounterOfJobseekersByCampaignIdToFixGlitch = ()=>({
 export const resetToZeroCounterOfJobseekersByCampaignIdToFixGlitch = ()=>({
   type: RESET_TO_ZERO_COUNTER_OF_JOBSEEKERS_BY_CAMPAIGN_ID_TO_FIX_GLITCH
 })
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const nestJobseekersIntoCampaigns = ()=>{
   return {

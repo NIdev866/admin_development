@@ -21,42 +21,24 @@ class TabComponent extends Component {
   constructor(props){
     super(props)
     this.handleWhichTab = this.handleWhichTab.bind(this)
-
-
     this.state = {
       slideIndex: 0,
-
       width: '0', height: '0'
     }
     this.handleSwipeChange = this.handleSwipeChange.bind(this)
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
-
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
-
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
-
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
-
-
-
-
-
-
-
-
-
-
-
-
   handleSwipeChange(value){
     this.setState({
       slideIndex: value,
@@ -76,14 +58,22 @@ class TabComponent extends Component {
             return null;
         }
       }
-
-
+      else{
+        switch (this.state.slideIndex) {
+          case 0:
+            return this.props.workforceSlidOn()
+          case 1:
+            return this.props.applicantsSlidOn()
+          case 2:
+            return this.props.clientsSlidOn()
+          case 3:
+            return this.props.statisticsSlidOn()
+          default:
+            return null;
+        }
+      }
     });
   };
-
-
-
-
   handleWhichTab(){
     switch (this.props.tabOpen) {
       case "workforce":
@@ -109,7 +99,6 @@ class TabComponent extends Component {
         height: '50px',
       }
     }
-
     const footerStyle = {
       position: "absolute",
       left: "0",
@@ -139,25 +128,23 @@ class TabComponent extends Component {
               <Tab value={3} onActive={this.props.statisticsClick} style={{fontFamily: globalFonts.Abel, marginTop: '-12px', marginBottom: '-10px'}} icon={<FontIcon className="material-icons">equalizer</FontIcon>} label="STATISTICS" />
             </Tabs>
           </div>
-
           <SwipeableViews
             index={this.state.slideIndex}
             onChangeIndex={this.handleSwipeChange}
           >
             <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
-              <WorkforceTabParent workforceClick={this.props.workforceClick}/>
+              <WorkforceTabParent width={this.state.width} workforceClick={this.props.workforceClick}/>
             </div>
             <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
-              <ApplicantsTabParent applicantsClick={this.props.applicantsClick}/>
+              <ApplicantsTabParent width={this.state.width} applicantsClick={this.props.applicantsClick}/>
             </div>
             <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
-              <ClientsTabParent clientsClick={this.props.clientsClick}/>
+              <ClientsTabParent width={this.state.width} clientsClick={this.props.clientsClick}/>
             </div>
             <div style={{padding: '0 10px', width: 'calc(100% - 20px)', height: this.state.height - 51}}>
-              <StatisticsTabParent statisticsClick={this.props.statisticsClick}/>
+              <StatisticsTabParent width={this.state.width} statisticsClick={this.props.statisticsClick}/>
             </div>
           </SwipeableViews>
-
         </div>
       </div>
     )
